@@ -1,0 +1,6 @@
+com\piseth\java\school\phoneshopenight\service\ReportServiceTest.class
+com\piseth\java\school\phoneshopenight\service\BrandServiceTest.class
+com\piseth\java\school\phoneshopenight\PhoneshopeNightApplicationTests.class
+com\piseth\java\school\phoneshopenight\repository\BrandRepositoryTest.class
+com\piseth\java\school\phoneshopenight\util\GeneralUtilsTest.class
+com\piseth\java\school\phoneshopenight\util\ReportTestHelper.class

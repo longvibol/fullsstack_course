@@ -1,0 +1,200 @@
+Week 1 : BackEnd Setup Evn
+
+*** យើងអត់អោយ Hibernet Generate table ory yerng te *** 
+
+1. Create Liquibase : Migration DB 
+- check on JPA 
+
+jpa:
+    hibernate:
+      ddl-auto: none 
+
+- none = stop auto update 
+
+2. check on Liquibase: 
+
+liquibase:
+        change-log: classpath:db/changelog/db.changelog-master.yaml
+        enabled: true
+
+- true = we use Liquibase to generate table 
+
+=========================
+
+Error Fix : 
+
+ ERROR: column brand0_.date_create does not exist
+  Position: 42
+
+
+* ដោយសារតែនៅក្នុង Database ភ្លេច បង្កើត colum in Brands 
+* check : Bands 
+
+@Data
+@Entity
+@Table(name = "brands")
+public class Brand extends AuditEntity{
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "brand_id")
+	private Long id;
+	
+	@Column(name = "brand_name")
+	private String name;	
+}
+
+យើងឃើញថាវា Extend មកពី AuditEntity (បង្កើតឡើងដើម្បីដឹងថា នាក់ណានាក់បង្កើត or insert brand ចូលក្នុង Database)  
+
+
+public abstract class AuditEntity {
+	@CreatedDate
+	private LocalDateTime dateCreate;
+	
+	@LastModifiedDate
+	private LocalDateTime dateUpdate;
+	
+	@CreatedBy
+	private String userCreate;
+	
+	@LastModifiedBy
+	private String userUpdate;
+
+}
+
+សង្កេតទៅឃើញថា " dateCreate " 
+private LocalDateTime dateCreate;
+
+in side the table base we need to create by ourselves for the dateCreate with converting from dateCreate to date_Create
+
+
+==================== Solution we create liquitbase to insert the colum to the database: 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
