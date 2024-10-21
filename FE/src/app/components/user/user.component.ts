@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, FormArray} from '@angular/forms';
-import { User } from 'src/app/models/user.model';
 
 
 @Component({
@@ -55,11 +54,25 @@ export class UserComponent implements OnInit {
   }
 
   saveUser(){
-    console.log("================================")
-    let myUser = new User(this.userForm, this.roleNames);
-    console.log(myUser);
-    console.log(myUser.roles);
-  }
-    
+    // console.log("================================")
+    // let myUser = new User(this.userForm, this.roleNames);
+    // console.log(myUser);
+    // console.log(myUser.roles);
+
+    let data = this.userForm.value;
+    //data.roles = ["test"];// we can assgin the value to the data in js 
+
+    let selectedRoles = []; // we careatae emaply arrage to get the element from selected 
+
+
+    for(let i = 0; i<data.roles.length; i++){
+      if(data.roles[i]){
+        selectedRoles.push(this.roleNames[i]);
+      }
+ }
+    data.roles = selectedRoles;
+    console.log(data);
+
+  }    
 
 }
