@@ -1,0 +1,3 @@
+week 2.1 : create form input
+
+- Convert Form Data to JavaScrip Object 
