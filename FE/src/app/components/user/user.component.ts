@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, FormArray} from '@angular/forms';
+import { UserService } from 'src/app/services/user.service';
 
 
 @Component({
@@ -14,10 +15,8 @@ export class UserComponent implements OnInit {
 
   roleNames = ["Sale","Account"];
 
-  constructor(private fb: FormBuilder,
-     ) { }
+  constructor(private fb: FormBuilder,private userService:UserService) { }
 
-     // accessor
   get roles(){
     return this.userForm.get("roles") as FormArray;
     // we get from userForm (from input template) and select base on key roles: this.fb.array([])
@@ -40,38 +39,28 @@ export class UserComponent implements OnInit {
 
   private getUserData(){
     let data = this.userForm.value;
-
-    let selectedRoles = [];
-
-    for(let i =0; i<data.roles.length; i++){
-      if(data.roles[i]){
-          selectedRoles.push(this.roleNames[i])
-      }
-    }
-    data.roles = selectedRoles;
-    //console.log(data);
-    return data;
-  }
-
-  saveUser(){
-    // console.log("================================")
-    // let myUser = new User(this.userForm, this.roleNames);
-    // console.log(myUser);
-    // console.log(myUser.roles);
-
-    let data = this.userForm.value;
-    //data.roles = ["test"];// we can assgin the value to the data in js 
-
-    let selectedRoles = []; // we careatae emaply arrage to get the element from selected 
-
-
+    let selectedRoles = []; 
     for(let i = 0; i<data.roles.length; i++){
       if(data.roles[i]){
         selectedRoles.push(this.roleNames[i]);
       }
  }
     data.roles = selectedRoles;
-    console.log(data);
+    // console.log(data);
+    return data;
+  }
+
+  saveUser(){
+    
+    this.isSubmitted=true;
+ 
+    let data = this.getUserData();    
+    this.userService.saveUser(data).subscribe(()=>{
+      console.log("User Save");
+    }, err =>{
+      console.log("Error");
+      console.log(err);
+    });
 
   }    
 

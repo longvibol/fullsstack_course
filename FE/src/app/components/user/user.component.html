@@ -26,10 +26,10 @@
                             </label>                        
                         </div>
                         <div class="d-grid gap-2 mt-3">                        
-                            <button class="btn btn-primary" (click)="saveUser()" [disabled]="isSubmitted">Create</button>
+                            <button class="btn btn-primary" (click)="saveUser()" [disabled]="isSubmitted" [disabled]="isSubmitted">Create</button>
                         </div>
                     </form>
-                    {{userForm.value | json}}
+                    <!-- {{userForm.value | json}} -->
                 </div>
             </div>
         </div>

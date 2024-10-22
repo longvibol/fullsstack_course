@@ -1,0 +1,182 @@
+week 2.1 : create form input:
+
+GitHub link : https://github.com/pisething/phoneshop_night_fe/tree/main/src/app
+
+in user.component.html :
+
+<div class="row">
+    <div class="col-6 col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="m-sm-3">
+                    <form [formGroup]="userForm">
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input class="form-control form-control-lg" type="text" formControlName="username" placeholder="Enter your name" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input class="form-control form-control-lg" type="email" formControlName="email" placeholder="Enter your email" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input class="form-control form-control-lg" type="password" formControlName="password" placeholder="Enter password" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Roles</label>
+                            <label formArrayName="roles" *ngFor="let role of roles.controls; let i=index" class="form-check">
+                                <input class="form-check-input" type="checkbox" [formControlName]="i" [value]="i">
+                                <span class="form-check-label">
+                                  {{roleNames[i]}}
+                                </span>
+                            </label>                        
+                        </div>
+                        <div class="d-grid gap-2 mt-3">                        
+                            <button class="btn btn-primary" (click)="saveUser()" [disabled]="isSubmitted">Create</button>
+                        </div>
+                    </form>
+                    {{userForm.value | json}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+==> then we can have form 
+
+2. user.component.ts 
+
+import { Component, OnInit } from '@angular/core';
+import {FormBuilder, FormGroup, FormArray} from '@angular/forms';
+import { User } from 'src/app/models/user.model';
+
+
+@Component({
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.css']
+})
+export class UserComponent implements OnInit {
+
+  userForm!: FormGroup;
+  isSubmitted = false;
+
+  roleNames = ["Sale","Account"];
+
+  constructor(private fb: FormBuilder,
+     ) { }
+
+     // accessor
+  get roles(){
+    return this.userForm.get("roles") as FormArray;
+    // we get from userForm (from input template) and select base on key roles: this.fb.array([])
+  }
+
+  ngOnInit(): void {
+    this.userForm = this.fb.group({
+      username: [''],
+      email: [''],
+      password: [''],
+      roles: this.fb.array([])
+    });
+
+    // After we start==>we loop and add role to the roleNames 
+    for(let i of this.roleNames){
+      this.roles.push(this.fb.control(''));// where we add roles from our list 
+    }
+
+  }
+
+  private getUserData(){
+    let data = this.userForm.value;
+
+    let selectedRoles = [];
+
+    for(let i =0; i<data.roles.length; i++){
+      if(data.roles[i]){
+          selectedRoles.push(this.roleNames[i])
+      }
+    }
+    data.roles = selectedRoles;
+    //console.log(data);
+    return data;
+  }
+
+  saveUser(){
+    console.log("================================")
+    let myUser = new User(this.userForm, this.roleNames);
+    console.log(myUser);
+    console.log(myUser.roles);
+  }
+    
+
+}
+
+
+3. customzie select roles by create model 
+
+Create model : 
+
+- user.model.ts
+
+import { FormGroup } from "@angular/forms";
+
+export class User {
+    username!: string;
+    email!: string;
+    password!: string;
+    roles: string[]=[];
+
+    public constructor(form: FormGroup, roleNames: string[]){
+       this.username = form.get("username")?.value;
+       this.email = form.get("email")?.value;
+       this.password = form.get("password")?.value;
+       let rolesData = form.get("roles")?.value;
+
+       for(let i = 0; i<rolesData.length; i++){
+            if(rolesData[i]){
+                this.roles.push(roleNames[i]);
+            }
+       }
+    }
+}
+
+=============================================
+
+Then we can have object submit from template : 
+
+{ "username": "vibol", "email": "vibollong@gmail.com", "password": "123", "roles": [ true, "" ] }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

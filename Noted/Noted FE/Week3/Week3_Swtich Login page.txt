@@ -1,0 +1,187 @@
+Week3_Swtich Login page
+
+Lesson:
+
+separate inline block
+<div *ngIf ="displayValue; then thenBlock; else elseBlock"></div>
+
+<ng-template #thenBlock> 
+	<h1> block 1</h1>
+<ng-template>
+
+<ng-template #eleseBlock>
+	<h1> The hiden blcok</h1>
+<ng-template> 
+
+==================================== Switching from Mainpaget to Login Page we use ng-template switch 
+
+1.1 in app.component.html 
+
+  <div class="wrapper" *ngIf ="isLoggedIn; else elseBlock">
+
+    <app-sidebar></app-sidebar>  
+    
+    <div class="main">
+      <app-navbar></app-navbar>
+      <main class="content">
+        <div class="container-fluid p-0">
+          <router-outlet></router-outlet>
+        </div>
+      </main>
+  
+      <app-footer></app-footer>
+    </div>
+  </div>	
+
+
+<ng-template #elseBlock>
+    <app-login></app-login>
+<ng-template> 
+
+1.2 app.component.ts 
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'FE';
+  isLoggedIn = false;
+}
+-- explain ----
+
+We create isLoggedIn to control the login true or false : then we use ngIf to switch between page and login 
+
+
+13. userServer (it will become to authService) 
+
+import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http'
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  
+  url = "http://localhost:8080/";
+
+  constructor(private http:HttpClient) { }
+
+  saveUser(user : any){
+    return this.http.post(this.url + "api/auth/signup", user);
+  }
+
+  login(loginData: any) : Observable<any>{
+    return this.http.post(this.url+ "api/auth/signin", loginData);
+  }  
+}
+
+
+--- explain ---
+- Observable<any> = we declare type to be Obserable because when we submit then it will return back from BE 
+- loginData : it is like the varable that we get from template 
+
+
+====================================================================================
+
+1. Create login page 
+>> ng g c components/loggin 
+
+- in login.component.html 
+
+<main class="d-flex w-100">
+    <div class="container d-flex flex-column">
+        <div class="row vh-100">
+            <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto d-table h-100">
+                <div class="d-table-cell align-middle">
+
+                    <div class="text-center mt-4">
+                        <h1 class="h2">Welcome back!</h1>
+                        <p class="lead">
+                            Sign in to your account to continue
+                        </p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="m-sm-3">
+                                <form [formGroup]="loginForm">
+                                    <div class="mb-3">
+                                        <label class="form-label" >Username</label>
+                                        <input class="form-control form-control-lg" type="username" formControlName="username" placeholder="Enter your username" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label" >Password</label>
+                                        <input class="form-control form-control-lg" type="password" formControlName="password" placeholder="Enter your password" />
+                                    </div>
+                                    <div class="d-grid gap-2 mt-3">
+                                        <button class="btn btn-lg btn-primary" (click)="signIn()">Sign in</button>
+                                    </div>
+                                </form>
+                                {{loginForm.value | json}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+</main>
+
+
+2. loggin.component.ts 
+import { HttpResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { UserService } from 'src/app/services/user.service';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
+})
+export class LoginComponent implements OnInit {
+
+  loginForm!: FormGroup;
+
+  constructor(private userService:UserService, private fb: FormBuilder) { }
+
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      username: [''],
+      password: ['']  
+    });
+  }
+
+  signIn(){
+    let loginData = this.loginForm.value;
+    console.log(loginData);
+    this.userService.login(loginData).subscribe((res : HttpResponse<any>)=>{
+      console.log("Login Success!")
+      console.log(res.headers.get("Authorization"));
+    }, err =>{
+      console.log(err);
+    });
+  }
+
+}
+
+
+-- Explain :  
+
++ constructor(private userService:UserService, private fb: FormBuilder) { } to get the server from userService 
++ ngOnInit : we create model login and get the data from username and password from html 
++  loginForm!: FormGroup; = Reactive form that we use to get the data from template 
++  signIn() = is the function when click the data will send request http to BE 
+
+
+--------Error 
+
+Required request body is missing: public org.sprin…a.school.phoneshopenight.config.jwt
+
+Search : Angular get response headers 
