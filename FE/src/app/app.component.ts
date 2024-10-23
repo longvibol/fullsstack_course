@@ -8,4 +8,8 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'FE';
   isLoggedIn = false;
+
+  switchView(isSignedIn: boolean){
+    this.isLoggedIn = isSignedIn;
+  }
 }

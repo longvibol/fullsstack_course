@@ -1,0 +1,122 @@
+Week 4 : Fix Error note return header: 
+
+- We need to fix on FE and BE 
+
+1. First we check on the api controller signin 
+
+@PostMapping("/signin")
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+		String jwt = authService.authenticateUser(loginRequest);
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.set("Authorization", "Bearer " + jwt);
+		
+		return ResponseEntity.ok().headers(responseHeaders).build();
+	}
+
+
+explain when sign page it will response with Authorization and add ""Bearer " + jwt 
+to response to the FE. 
+
+Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2wiLCJpYXQiOjE3Mjk2NzM0OTksImV4cCI6MTcyOTc1OTg5OX0.Sw8Gf9KlRiN3EbcA42q2raBFRZr37b9uhu4qSl_fJus
+
+
+-------------------------------------
+
+
+
+2. in BE we expose resoponse header :
+
+@PostMapping("/signin")
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+		String jwt = authService.authenticateUser(loginRequest);
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.set("Authorization", "Bearer " + jwt);
+		responseHeaders.set("Access-Control-Expose-Headers", "Authorization");
+		
+		return ResponseEntity.ok().headers(responseHeaders).build();
+	}
+
+---
+responseHeaders.set("Access-Control-Expose-Headers", "Authorization");
+
+-------------------------------------------------
+
+
+3. we need to expose fro BE (expose mean លាតត្រដាង)
+
+we add in the user.service.ts 
+
+ login(loginData: any) : Observable<any>{
+    return this.http.post(this.url+ "api/auth/signin", loginData,{observe: 'response'});
+  }  
+
+
+==> 
+
+Login Success!
+login.component.ts:29 Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2wiLCJpYXQiOjE3Mjk2NzQwNDcsImV4cCI6MTcyOTc2MDQ0N30.EPA5H1n0UmsLR1NRr2Tpas7iwci14u20r7DMBHzNt7Q
+
+
+
+*** --------------------------------****
+
+Which one is better Respond body and Header : 
+
+==> វាទៅតាម company មួយៗ តែអ្វីដែលគេពេញនិយោម គឺ respond header វា flexible យើងចង់បន្ថែមប៉ុន្មានក៏បានដែល 
+តែបើយើង respone vir body វិញយើងត្រូវការ DTO ចឹងយើងត្រូវធ្វើការបន្អែម field (មានន័យថាយើងត្រូវធ្វើការកែ DOT) 
+
+- but if we use respond header we just add header in BE តែបើយើង resond from body ទាល់តែវា មាន name ban set ban ….
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
