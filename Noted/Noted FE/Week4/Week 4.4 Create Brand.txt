@@ -1,0 +1,318 @@
+Week 4.4 Create Brand 
+
+Gold: how to submit token when using POST to BE 
+
+1. Create form create branch 
+
+- brand.component.html 
+
+<div class="row">
+  <div class="col-6 col-lg-12">
+      <div class="card">
+          <div class="card-body">
+              <div class="m-sm-3">
+                  <form [formGroup]="brandForm">
+                      <div class="mb-3">
+                          <label class="form-label">Brand Name</label>
+                          <input class="form-control form-control-lg" type="text" formControlName="name" placeholder="Enter brand name" />
+                      </div>
+                      
+                      <div class="d-grid gap-2 mt-3">                        
+                          <button class="btn btn-primary" (click)="saveBrand()">Create</button>
+                      </div>
+                  </form>
+                {{brandForm.value | json}}
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+---Explain :
+
++ <form [formGroup]="brandForm"> = create formGroup template 
++ formControlName="name" = create Form name is name 
+
+
+- brand.component.ts 
+
+export class BrandComponent implements OnInit {
+
+  brandForm!: FormGroup;
+
+  constructor(private fb : FormBuilder) { }
+
+  ngOnInit(): void {
+    this.brandForm = this.fb.group({
+      name: ['']
+    });
+  }
+
+  saveBrand(){
+
+    console.log(this.brandForm.value);
+  }
+
+}
+
+
+-- Explain : 
+
++ brandForm!: FormGroup; = create Form group (it is like create class) 
++ private fb : FormBuilder = we inject the FormBuilder 
++  this.brandForm = this.fb.group({
+      name: ['']
+    });
+
+= when initial it will assign name. 
+
+-----------------------------------------Then we will create service to submit to BE 
+
+2. Create service bransService (to save Brands)
+
+- In brand.service.ts :
+
+
+import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http'
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class brandService {
+  
+  url = "http://localhost:8080/";
+
+  constructor(private http:HttpClient) { }
+
+  saveBrand(brand : any){
+    return this.http.post(this.url + "brands", brand);
+  }
+}
+
+
+----------------- Inject brandService 
+
+- in brand.component.ts 
+
+
+export class BrandComponent implements OnInit {
+
+  brandForm!: FormGroup;
+
+  constructor(private fb : FormBuilder, private brandService:brandService) { }
+
+  ngOnInit(): void {
+    this.brandForm = this.fb.group({
+      name: ['']
+    });
+  }
+
+  saveBrand(){
+    console.log(this.brandForm.value);
+    this.brandService.saveBrand(this.brandForm.value).subscribe(res=>{
+      console.log("Brand Response");
+      console.log(res);
+    }, err=>{
+      console.log("Error Block")
+      console.error(err);
+    })
+  }
+
+}
+
+
+--- It will error 401 Unauthorized : That why we need to submit the token when login to the brand 
+
++ Keyword search : angular13 set request headers 
+
+- in brand.service.ts 
+
+saveBrand(brand : any){
+
+    // we take token from brower 
+    let token = localStorage.getItem('token')!;
+
+    // we crate storage to sent to BE 
+    const headers = new HttpHeaders({
+      'Content-Type' : 'application/json',
+      'Authorization' : token
+    });
+
+    const requestOptions = {headers : headers};
+
+    return this.http.post(this.url + "brands", brand, requestOptions);
+  }
+
+==> inspector -> Network -> brand --> check on request header -->
+
+authorization:
+Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib2wiLCJpYXQiOjE3Mjk3MzI4NTIsImV4cCI6MTcyOTgxOTI1Mn0.C4amqgGJ-TPfcosW-JW6hRHHKIhkgD-IiGruM_Lvdt0
+
+--------------------------- It is not best practice យើងគិតមើលសម្រាប់តែមួយ End point នឹងយើងត្រូវការបង្លើត request header neng 
+ច្រើនដល់ចុះបើមាន end point ច្រើនយើងធ្វើយ៉ាងម្តេចមិន code robos yerng not reusable 
+
+================================================
+**********************
+
+We use Http request interceptor : មានន័យថាពេលមានអីឆ្លងកាត់មកអោយវាកាត់យកហើយ set token អោយវា​
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

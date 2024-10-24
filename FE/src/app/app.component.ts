@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'FE';
-  isLoggedIn = false;
+  isLoggedIn = true;
 
   switchView(isSignedIn: boolean){
     this.isLoggedIn = isSignedIn;
