@@ -12,6 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
 import { TokenInterceptor } from './interceptor/token.interceptor';
+import { BrandListComponent } from './components/brand/brand-list/brand-list.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { TokenInterceptor } from './interceptor/token.interceptor';
     SidebarComponent,
     UserComponent,
     LoginComponent,
+    BrandListComponent,
   ],
   imports: [
     BrowserModule,

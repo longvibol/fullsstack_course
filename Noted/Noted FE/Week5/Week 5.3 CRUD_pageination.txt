@@ -1,0 +1,246 @@
+Week 5.2 CRUD
+
+Get pagination : We design base on specification API from BE 
+
+*** Want http://localhost:8080/brands?_limit=5
+
+*** Return 
+
+"list": [
+        {
+            "id": 1,
+            "name": "Apple"
+        },
+        {
+            "id": 2,
+            "name": "Samsung"
+        },
+        {
+            "id": 3,
+            "name": "Nokia"
+        },
+        {
+            "id": 4,
+            "name": "Oppo"
+        },
+        {
+            "id": 5,
+            "name": "blackBurry"
+        }
+    ],
+    "pagination": {
+        "pageSize": 5,
+        "pageNumber": 1,
+        "totalPages": 2,
+        "totalElements": 8,
+        "numberOfElements": 5,
+        "first": true,
+        "last": false,
+        "empty": false
+    }
+}
+
+------------------------------------------
+
+Search keyword : angular request parameters
+
+Note : 
+
+http://localhost:8080/brands?_limit=5&_page=2 
+
+*** សញ្ញា & គឺជាការបន្ថែម គេហៅថា append 
+
+builder partern : គោលបំណងចង់បាន ក្នុង Netword ពេល Request tov មាន brands?_limit=5
+
+1. in brand.server.ts 
+
+ getBrandList(brandParam: HttpParams): Observable<any>{
+    return this.http.get<any[]>(this.url +"brands", {params:brandParam});
+  } 
+
+-- explain : {params:brandParam} we add option with parameter to get the value input 
+
+2. in brand-list.component.html 
+
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Selects Pages</h5>
+        </div>
+        <div class="card-body">
+          <select class="form-select mb-3" (change)="getBrandsByLimit($event)">          
+            <option value="5">Total item 5</option>
+            <option value="10">Total item 10</option>
+            <option value="15">Total item 15</option>
+          </select>
+        </div>
+      </div>
+
+
+
+---explain:
+
+This div user for select the pagination : 
+
+- Search Key: angular valuechange event (want when select the value it will get the value) 
+
+- <select class="form-select mb-3" (change)="getBrandsByLimit($event)">         
+
+3. in brand-list.component.ts 
+
+---when page start :
+
+ ngOnInit(): void {
+    let param = new HttpParams();
+    // .append("_page",2)
+    // .append("_limit",5);
+    param = param.append("_limit",5);
+    this.getBrands(param);
+
+  }
+
+-- create function to get param : 
+
+  private getBrands(param : HttpParams){
+    this.brandService.getBrandList(param).subscribe(res =>{
+      console.log(res);
+      this.brands = res.list;
+    }, err =>{
+      console.log(err);
+    });
+  }
+
+-- function that get change $event from html 
+
+  getBrandsByLimit(limitCombobox: any){
+    //console.log(limitCombobox.target.value);
+    let limit = limitCombobox.target.value;
+    let param = new HttpParams()
+    param = param.append("_limit", limit);
+    this.getBrands(param);
+  }
+
+
+
+============================Whole code in brand-list.component.ts 
+
+import { HttpParams } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { brandService } from 'src/app/services/brand.service';
+
+@Component({
+  selector: 'app-brand-list',
+  templateUrl: './brand-list.component.html',
+  styleUrls: ['./brand-list.component.css']
+})
+export class BrandListComponent implements OnInit {
+
+  brands! :any[];
+
+  constructor(private brandService: brandService) { }
+
+  ngOnInit(): void {
+    let param = new HttpParams();
+    // .append("_page",2)
+    // .append("_limit",5);
+    param = param.append("_limit",5);
+    this.getBrands(param);
+
+    /*
+    this.brandService.getBrandList(param).subscribe(res =>{
+      console.log(res);
+      this.brands = res.list;
+    }, err =>{
+      console.log(err);
+    });
+    */
+  }
+
+  private getBrands(param : HttpParams){
+    this.brandService.getBrandList(param).subscribe(res =>{
+      console.log(res);
+      this.brands = res.list;
+    }, err =>{
+      console.log(err);
+    });
+  }
+
+  getBrandsByLimit(limitCombobox: any){
+    //console.log(limitCombobox.target.value);
+    let limit = limitCombobox.target.value;
+    let param = new HttpParams()
+    param = param.append("_limit", limit);
+    this.getBrands(param);
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

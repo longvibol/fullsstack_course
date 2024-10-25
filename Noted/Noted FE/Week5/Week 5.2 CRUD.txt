@@ -1,0 +1,127 @@
+Week 5.2 CRUD
+
+CRUD : Create , retrieve, Update , Delete 
+
+
+1. Brand : Retrieve 
+when user login it will see the list of brand that they have ( it mean we retrieve the data from BE) 
+
+vir return mok cher object : res 
+
+Respone back from BE is object :
+
+{
+    "list": [
+        {
+            "id": 1,
+            "name": "Apple"
+        },
+        {
+            "id": 2,
+            "name": "Samsung"
+        }
+    ],
+    "pagination": {
+        "pageSize": 2,
+        "pageNumber": 1,
+        "totalPages": 4,
+        "totalElements": 8,
+        "numberOfElements": 2,
+        "first": true,
+        "last": false,
+        "empty": false
+    }
+}
+
+
+ចឹងយើងត្រូវចាប់វាជា object we can check in the console : it return object List and Pagination 
+
+1. in bandService.ts
+
+  getBrandList(): Observable<any>{
+    return this.http.get<any[]>(this.url +"brands");
+  } 
+
+--explain :  return this.http.get<any[]>(this.url +"brands"); We get the list from BE and put the Observable<any> 
+
+2. in brand-list.component.ts
+
+export class BrandListComponent implements OnInit {
+
+  brands! :any[];
+
+  constructor(private brandService: brandService) { }
+
+  ngOnInit(): void {
+    this.brandService.getBrandList().subscribe(res =>{
+      console.log(res);
+      this.brands = res.list;
+    }, err =>{
+      console.log(err);
+    });
+  }
+
+}
+
+--explain :  this.brands = res.list = we get the list and it it observable 
+
+3. brand-list.component.html
+
+<table class="table table-hover my-0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th class="d-none d-xl-table-cell">Name</th>
+                        <th class="d-none d-xl-table-cell">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let brand of brands">
+                        <td>{{brand.id}}</td>
+                        <td class="d-none d-xl-table-cell">{{brand.name}}</td>
+                        <td class="d-none d-xl-table-cell"><a href="#">Edit</a> | <a href="#">Delete</a></td>
+
+                </tbody>
+            </table>
+
+-- Explain : <tr *ngFor="let brand of brands"> = we loop and get the data from BE 
+
+-----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

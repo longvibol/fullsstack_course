@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http'
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http'
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -12,7 +13,6 @@ export class brandService {
   constructor(private http:HttpClient) { }
 
   saveBrand(brand : any){
-
     /*
     // we take token from brower 
     let token = localStorage.getItem('token')!;
@@ -22,15 +22,14 @@ export class brandService {
       'Content-Type' : 'application/json',
       'Authorization' : token
     });
-
     const requestOptions = {headers : headers};
-
     return this.http.post(this.url + "brands", brand, requestOptions);
-
-    */
-   
+    */   
     return this.http.post(this.url + "brands", brand);
-
-
   }
+
+  getBrandList(brandParam: HttpParams): Observable<any>{
+    return this.http.get<any[]>(this.url +"brands", {params:brandParam});
+  } 
+
 }
