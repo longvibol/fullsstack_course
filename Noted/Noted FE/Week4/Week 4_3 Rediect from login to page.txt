@@ -1,0 +1,242 @@
+Week 4_3 Redirect to page 
+
+- we check on token if the token have we redirect to our page :
+- in the parent : app.component.html 
+
+<ng-template #elseBlock>
+    <app-login></app-login>
+<ng-template> 
+
+We want to access from app.compoent.ts 
+
+export class AppComponent {
+  title = 'FE';
+  isLoggedIn = false;
+}
+
+-- explain when value isLoggedIn = false ==> it will go to sign page 
+therefore we want to make it true when it have token (isLoggedIn = ture) 
+
+that why we want to access this value!!!! យើង Access ពី Login form ( យើងមើល មេរៀន component interaction ) 
+
+this case we use child even :
+
+---------------------------------------------------------------
+
+
+1. in the loggin.ts 
+
+@Output() loginEvent = new EventEmitter<boolean>(); 
+
+-- we use Boolean because in app.component.ts ( isLoggedIn = false; is boolend) 
+
+==> in signIn() function 
+
+--------------
+
+signIn(){
+    let loginData = this.loginForm.value;
+    console.log(loginData);
+    this.userService.login(loginData).subscribe((res : HttpResponse<any>)=>{
+      console.log("Login Success!")
+      console.log(res.headers.get("Authorization"));
+
+      //set to localstorage 
+      let token = res.headers.get("Authorization")!;
+      localStorage.setItem("token", token);
+      this.loginEvent.emit(true);
+
+
+    }, err =>{
+      console.log(err);
+    });
+  }
+
+
+
+-------------- 
+
+
+this.loginEvent.emit(true); if it have respond from BE with token we emit : true 
+
+បន្ទាប់មកយើងត្រូវធ្វើការចាប់តម្លៃនឹងនៅ parent : app.component.html 
+
+
+- in app.component.html 
+
+<ng-template #elseBlock>
+    <app-login (loginEvent)="switchView($event)"></app-login>
+<ng-template> 
+
+
+- in app.component.ts 
+
+export class AppComponent {
+  title = 'FE';
+  isLoggedIn = false;
+
+  switchView(isSignedIn: boolean){
+    this.isLoggedIn = isSignedIn;
+  }
+}
+
+-- when it have event emited we set this.isLoggedIn = isSignedIn;}
+
+-----------------------------------------------------------------------------------------------------
+
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'FE';
+  isLoggedIn = false;
+
+  switchView(isSignedIn: boolean){
+    this.isLoggedIn = isSignedIn;
+  }
+}
+
+-------------------------------------------------------------------------------------------------------
+
+
+
+  <div class="wrapper" *ngIf ="isLoggedIn; else elseBlock">
+
+    <app-sidebar></app-sidebar>  
+    
+    <div class="main">
+      <app-navbar></app-navbar>
+      <main class="content">
+        <div class="container-fluid p-0">
+          <router-outlet></router-outlet>
+        </div>
+      </main>
+  
+      <app-footer></app-footer>
+    </div>
+  </div>	
+
+
+<ng-template #elseBlock>
+    <app-login (loginEvent)="switchView($event)"></app-login>
+<ng-template> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

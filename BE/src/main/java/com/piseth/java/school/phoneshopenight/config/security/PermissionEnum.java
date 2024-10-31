@@ -1,10 +1,11 @@
 package com.piseth.java.school.phoneshopenight.config.security;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
+@AllArgsConstructor()
 public enum PermissionEnum {
 	BRAND_WRITE("brand:write"),
 	BRAND_READ("brand:read"),

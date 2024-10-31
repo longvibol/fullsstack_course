@@ -1,0 +1,82 @@
+We want to user to view when they login then it will see the brand-list then they can 
+Edit on the item and delete:
+
+Ex:
+
+1. Nokia ----------Edit | Deleted 
+
+>> ng g c components/brand-form 
+>> ng g c components/brand-list 
+
+==> crate folder to keep them :
+
+band : brand-list and brand-form 
+
+------------------------------------------ Create routed (use parent and child route)
+
+const routes: Routes = [
+  {path:"user", component: UserComponent},
+  {path:"brand", component:BrandComponent,
+    children:[
+      {path:"", redirectTo:"list",pathMatch:"full"},
+      {path:"list", component:BrandListComponent},
+      {path:"form", component: BrandFormComponent},
+      {path:"form/:id",component:BrandFormComponent}
+    ]
+  }
+
+
+-- Explain : 
+
+1. Parent :
+
+{path:"brand", component:BrandComponent, = when start page with localhost:4200/brand ==> it will redirect to parent main BrandComponent 
+
+2. Childe rout 
+
+{path:"", redirectTo:"list",pathMatch:"full"}, = localhost:4200/brand អត់ដាក់អីសោះ "" អោយវាទៅ brand-list 
+ {path:"form", component: BrandFormComponent}, អោយវាទៅ brand-form 
+ {path:"form/:id",component:BrandFormComponent} អោយវាទៅ brand-form ដូចគ្នា
+
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

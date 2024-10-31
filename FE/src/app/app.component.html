@@ -1,14 +1,25 @@
-<div class="wrapper">
-  <app-sidebar></app-sidebar>
 
-  <div class="main">
-    <app-navbar></app-navbar>
-    <main class="content">
-      <div class="container-fluid p-0">
-        <app-brand></app-brand>
-      </div>
-    </main>
+  <div class="wrapper" *ngIf ="isLoggedIn; else elseBlock">
 
-    <app-footer></app-footer>
-  </div>
-</div>
+    <app-sidebar></app-sidebar>  
+    
+    <div class="main">
+      <app-navbar (logoutEvent)="switchView($event)"></app-navbar>
+      <main class="content">
+        <div class="container-fluid p-0">
+          <router-outlet></router-outlet>
+        </div>
+      </main>
+  
+      <app-footer></app-footer>
+    </div>
+  </div>	
+
+
+<ng-template #elseBlock>
+    <app-login (loginEvent)="switchView($event)"></app-login>
+<ng-template> 
+
+
+
+

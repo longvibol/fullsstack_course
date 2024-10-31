@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col-12 col-lg-12 col-xxl-12 d-flex">
+      <div class="card flex-fill">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Brand List</h5>
+        </div>
+        <table class="table table-hover my-0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th class="d-none d-xl-table-cell">Name</th>
+              <th class="d-none d-xl-table-cell">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let brand of brands">
+              <td>{{ brand.id }}</td>
+              <td class="d-none d-xl-table-cell">{{ brand.name }}</td>
+              <td class="d-none d-xl-table-cell">
+                <td><button class="btn btn-primary btn-sm" (click)="edit(brand.id)">Edit</button> | 
+                <button class="btn btn-danger btn-sm" >Delete</button></td>              
+            </tr>
+          </tbody>
+        </table>
+  
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Selects Pages</h5>
+          </div>
+          <div class="card-body">
+            <select class="form-select mb-3" (change)="getBrandsByLimit($event)">          
+              <option value="5">Total item 5</option>
+              <option value="10">Total item 10</option>
+              <option value="15">Total item 15</option>
+              <option value="500">ALL</option>
+            </select>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>

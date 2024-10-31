@@ -1,0 +1,174 @@
+Week 6 retrive element from DB then edit :
+
+Edit element :
+
+យើងចង់បានពេល ចុតត្រង់ Button Edit យើងចាប់តម្លៃវាហើយដាក់ចូលទៅក្នុង edit form ជាមួយតម្លៃរបស់វា​ហើយយើងធ្វើការកែប្រែ
+(we get the data from BE because it is the last update from DB) 
+
+-- two style to catuch value : snapshot and paraMap Observable (check in lesson) 
+
+
+1. in brand-list.htm : button Edit and Delete (change style to button when we click it will redirect to form edit) 
+
+ <tbody>
+          <tr *ngFor="let brand of brands">
+            <td>{{ brand.id }}</td>
+            <td class="d-none d-xl-table-cell">{{ brand.name }}</td>
+            <td><button class="btn btn-primary btn-sm" (click)="edit(brand.id)">Edit</button>  | <button class="btn btn-danger btn-sm" (click)="edit(brand.id)">Delete</button> 
+            </td>
+          </tr>
+        </tbody>
+
+
+
+2. in brand-list.js : we create function eidt ()
+
+  edit(brandId: number){
+    //console.log(brandId);
+    this.router.navigate(["brand/form", brandId]);
+  }
+
+---- we use router.navigate to brand/form with BrandId 
+
+
+==> then we go to change in brand-form 
+
+In brand-from component.html 
+
+<div class="row">
+    <div class="col-6 col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="m-sm-3">
+                    <form [formGroup]="brandForm">
+                        <div class="mb-3">
+                            <label class="form-label">Brand Id</label>
+                            <input class="form-control form-control-lg" type="text" formControlName="id" [disabled]="true" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Brand Name</label>
+                            <input class="form-control form-control-lg" type="text" formControlName="name" placeholder="Enter brand name" />
+                        </div>
+                        
+                        <div class="d-grid gap-2 mt-3">                        
+                            <button class="btn btn-primary" (click)="saveBrand()" [disabled]="isSubmitted">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+-- <button class="btn btn-primary" (click)="saveBrand()" [disabled]="isSubmitted">Save</button> = first isSubmitted = false ==> then after click we will assing isSubmitted = true to 
+disable button. 
+
+- In brand-form.component.ts : we create function click on saveBrand 
+
+យើងបង្កើត function មួយអោយវា check  មើលបើយើងចាប់យក id នឹងមកប្រើចឹងវាមាន id យើងអោយវា ធ្វើការ Update តែបើអត់មាន id គឺយើងអោយវាបង្កើតថ្មីវិញ
+
+
+ ngOnInit(): void {
+    this.brandForm = this.fb.group({
+      id: [''],
+      name: ['']
+    });
+
+saveBrand(){
+    if(this.brandId){
+      this.updateBrand();
+    }else{
+      this.createBrand();
+    }
+  }
+
+-- we change on the brandId == ture ==> we updateBrand else we create new brand 
+
+
+createBrand(){
+    //console.log(this.brandForm.value);
+    this.brandService.saveBrand(this.brandForm.value).subscribe(res =>{
+      console.log("Brand Response");
+      console.log(res);
+      this.isSubmitted = true;
+      this.toastrService.success('Brand created successfully', '');
+    }, err =>{
+      console.log("Error Block");
+      console.error(err);
+    });
+  }
+
+--- 
+
+
+  updateBrand(){
+    this.brandService.updateBrand(this.brandForm.value).subscribe(res =>{
+      
+      this.isSubmitted = true;
+      this.toastrService.success('Brand updated successfully', '');
+    }, err =>{
+      console.log("Error Block");
+      console.error(err);
+    })
+  }
+---------------
+
+* in brand.service.ts 
+
+Method Save: POST: 
+------------------------------------------
+saveBrand(brand : any){
+    return this.http.post(this.url + "brands",brand);
+  }
+---------------------------------------
+Method Update : PUT
+
+updateBrand(brand: any){
+    return this.http.put(this.url + "brands/" + brand.id,brand);
+  }
+
+explain: when we create we use put method and it need request body : in our API it need id and brand name 
+{
+    "id" : 1,
+    "name" : "Japan_2024"
+}
+
+----------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
