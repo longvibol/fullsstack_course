@@ -135,9 +135,6 @@ public class SaleServiceImpl implements SaleService{
 	}
 
 
-
-
-
 	@Override
 	public void cancelSale(Long saleId) {
 		// update sale status
@@ -164,10 +161,6 @@ public class SaleServiceImpl implements SaleService{
 		
 		
 	}
-
-
-
-
 
 	@Override
 	public Sale getById(Long saleId) {

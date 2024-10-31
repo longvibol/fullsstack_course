@@ -1,0 +1,11 @@
+- Auto sequence 
+
+- in report have error 
+
+--------------------------------------------
+
+1. Implement all api from BE 
+2. Get roles from api 
+3. Using environmental variables 
+
+- Develop all functionality to get certificate 

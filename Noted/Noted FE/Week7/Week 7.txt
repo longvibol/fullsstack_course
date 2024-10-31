@@ -1,0 +1,31 @@
+select * from roles
+select * from users
+select * from colors
+
+select * from models
+select * from brands 
+
+select * from brands where brand_id = 2
+
+select * from users_roles
+
+select * from roles where id = 1
+
+update roles set name='ADMIN' where id =1
+
+insert into colors values(1,'Black'),(2,'Red'),(3,'White')
+
+
+---------------------------
+
+select * from colors
+
+select * from products
+
+select * from sales
+
+update sales set active = false where sale_id = 1
+
+select * from sale_details
+
+select * from product_import_histories

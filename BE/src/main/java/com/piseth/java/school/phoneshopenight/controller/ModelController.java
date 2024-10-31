@@ -30,4 +30,5 @@ public class ModelController {
 		model = modelService.save(model);
 		return ResponseEntity.ok(modelMapper.toModelDTO(model));
 	}
+	
 }
