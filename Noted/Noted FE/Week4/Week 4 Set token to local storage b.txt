@@ -1,0 +1,85 @@
+Week 4 Set token to local storage brower : 
+
+Go to inspector -> Application -> localstorage 
+
+in FE :
+
+signIn(){
+    let loginData = this.loginForm.value;
+    console.log(loginData);
+    this.userService.login(loginData).subscribe((res : HttpResponse<any>)=>{
+      console.log("Login Success!")
+      console.log(res.headers.get("Authorization"));
+
+      //set to localstorage 
+      let token = res.headers.get("Authorization")!;
+      localStorage.setItem("token", token);
+
+
+    }, err =>{
+      console.log(err);
+    });
+  }
+
+----explain : 
+
+//set to localstorage 
+      let token = res.headers.get("Authorization")!;
+      localStorage.setItem("token", token);
+
+
+==> it will storage in the Brower 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

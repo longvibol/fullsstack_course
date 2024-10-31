@@ -1,0 +1,129 @@
+Create Service to call interget from FE to BE 
+
+1. Create service 
+
+>>ng g s services/user 
+
+==> we have folder name services and have file user.service.ts 
+
+Code : in user.service.ts 
+
+import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http'
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  url = "http://localhost:8080/api/auth/signup";
+
+  constructor(private http:HttpClient) { }
+
+  saveUser(user : any){
+    return this.http.post(this.url, user);
+  }
+}
+
+
+--explain : 
+
+- url = where is the backend url using method post to create user 
+- HttpClient : is the call to BE method post 
+
+
+2. Want to call Http (httpModule) 
+
+- in user.component.ts 
+
+We in inject the service (userService) in the constructor :
+
+ constructor(private userService:UserService) { }
+
+- Create Function saveUser 
+
+saveUser(){
+ 
+    let data = this.getUserData();
+    
+    this.userService.saveUser(data).subscribe(()=>{
+      console.log("User Save");
+    }, err =>{
+      console.log("Error");
+      console.log(err);
+    });
+
+  }    
+
+
+- create getUserData to handle submit data from template: 
+
+  private getUserData(){
+    let data = this.userForm.value;
+    let selectedRoles = []; 
+    for(let i = 0; i<data.roles.length; i++){
+      if(data.roles[i]){
+        selectedRoles.push(this.roleNames[i]);
+      }
+ }
+    data.roles = selectedRoles;
+    // console.log(data);
+    return data;
+  }
+
+
+3. Error :  NullInjectorError: No provider for HttpClient!
+
+We need to add in root app.moudels.ts HttpClientModule 
+
+==> 
+
+import { HttpClientModule } from '@angular/common/http'; 
+
+
+imports: [
+    HttpClientModule
+  ],
+
+
+-----------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

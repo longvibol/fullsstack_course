@@ -52,14 +52,13 @@ public class WebSecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable())
-				.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+				.exceptionHandling(exception -> exception
+						.authenticationEntryPoint(unauthorizedHandler))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(auth -> 
-						auth.antMatchers("/api/auth/**").permitAll()
-						.antMatchers("/").permitAll()
-						.antMatchers("/swagger-ui/**","/swagger-ui.html","/webjars/**","/v2/**","/swagger-resources/**").permitAll()
-						.anyRequest().authenticated()
-				);
+				.authorizeHttpRequests(auth -> auth.antMatchers("/api/auth/**").permitAll().antMatchers("/").permitAll()
+						.antMatchers("/swagger-ui/**", "/swagger-ui.html", "/webjars/**", "/v2/**",
+								"/swagger-resources/**")
+						.permitAll().anyRequest().authenticated());
 
 		http.authenticationProvider(authenticationProvider());
 

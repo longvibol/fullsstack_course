@@ -1,0 +1,128 @@
+Week 4.4 : Interceptor  
+
+Search : angular request interceptor and header stackblit (it have example) 
+
+https://stackblitz.com/edit/angular-intercept-headers?file=src%2Fapp%2Fapp.module.ts
+
+
+------------------------------ 
+
+1. First create interceptor 
+
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
+import { Observable } from "rxjs";
+
+export class TokenInterceptor implements HttpInterceptor{
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        let token = localStorage.getItem('token')!;
+        let tokenizerReq = req.clone({
+            setHeaders: {
+                // Authorization: 'Bearer xx.yy.zz' (for testing)
+                Authorization: token
+            }
+        // we catch the request then set the Athorization to the request 
+        });
+        return next.handle(tokenizerReq);
+
+        // after that we use next.handle to use the new request that we have add the token 
+    }
+}
+
+
+2. put provider in app.modules.ts 
+
+ providers: [ { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true } ],
+
+------------------------- when every request it will pass throw intercept then it will set the token 
+
+
+
+
+
+
+
+
+
+
+
+
+
+lesson : creating token interceptor 
+
+* Modify request to add static header Authorization:
+
+ng g s token-interceptor 
+
+export class TokenInterceptorService implements HttpInterceptor{
+
+constructor(){}
+
+interceptor(req: HttpRequest<any>, next: HttpHandler){
+
+let tokeninzerReq = eq.clone({
+	setHeaders: {
+	 Authorization: 'Bearer xx.yy.zz'
+	}
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,222 @@
+Week 5.1 Improvement Logout 
+
+- Clear token :
+
+Think about local storage : we want to clear it when click on logout 
+
+1. find logout location 
+
+- in nav-bar. html 
+
+<a class="dropdown-item" href="#" (click)="signOut()">Log out</a>
+
+--We create function (click)="signOut()
+
+- in nav-bar.ts 
+
+@Output() logoutEvent = new EventEmitter<boolean>();
+
+signOut(){
+    localStorage.removeItem("token");
+    this.logoutEvent.emit(false);
+  }
+
+
+-- we emit to the parent where the view on Logout (this.logoutEvent.emit(false)_
+
+
+2. In parent app.componet.html : we called switchView function to set the boolent value to false 
+
+<app-navbar (logoutEvent)="switchView($event)"></app-navbar>
+
+Explain : When they click on Logout then it will emit false to the output and swtichViewFunction will triger 
+
+
+-----------------Problem when login back it can not login :
+
+Message:
+
+TypeError: Cannot read properties of null (reading 'length')
+    at HttpHeaders.applyUpdate (http.mjs:236:27)
+
+---------------------------------------------------------------------
+
+this issue can be two senarioy 
+
+1. Backend not working : 
+2. FB send nothing :
+
+- check on inspector on network it send nothing to the back end 
+
+
+root cause : FE not send the header to BE ; so we can test by putting the token: 123 then it will be work 
+
+-----------------Solution:  
+
+In the interceptor : We set the clone with token so now we can submit with emtyp header to BE 
+
+
+export class TokenInterceptor implements HttpInterceptor{
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        let token = localStorage.getItem('token')!;
+        let tokenizerReq = req.clone({
+            setHeaders: {
+                Authorization: token
+            } 
+        });
+        return next.handle(tokenizerReq);
+       
+    }
+}
+
+
+or other option to check it empty 
+
+ /*
+        if(token){
+            let tokenizerReq = req.clone({
+                setHeaders: {
+                    // Authorization: 'Bearer xx.yy.zz' (for testing)
+                    Authorization: token
+                }
+            // we catch the request then set the Athorization to the request                
+            });
+            return next.handle(tokenizerReq);
+        }
+        return next.handle(req);     
+        // after that we use next.handle to use the new request that we have add the token 
+        */
+
+--------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
